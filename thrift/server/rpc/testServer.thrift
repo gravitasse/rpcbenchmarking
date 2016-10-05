@@ -1,5 +1,13 @@
 namespace go testServer
 
+struct EchoRequest {
+	1: string Request
+}
+
+struct EchoReply {
+	1: string Reply
+}
+
 service TESTServices {
-        string ping(1:string msg)
+        EchoReply Ping(1: EchoRequest msg)
 }

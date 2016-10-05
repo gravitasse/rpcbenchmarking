@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
-	"time"
+	//"time"
 	"utils/ipcutils"
 )
 
@@ -31,7 +31,10 @@ func connect_to_testServer(port string) {
 
 func sendPing(msg string) {
 	//fmt.Println("Client: Sending Msg:", msg)
-	replyMsg, err := testClient.ClientHdl.Ping(msg)
+	requestMsg := testServer.EchoRequest{
+		Request: msg,
+	}
+	replyMsg, err := testClient.ClientHdl.Ping(&requestMsg)
 	if err != nil {
 		fmt.Println("Error sending msg")
 	} else {
@@ -53,9 +56,9 @@ func main() {
 		msg = msg + "A"
 	}
 	connect_to_testServer(*port)
-	t := time.Now()
+	//t := time.Now()
 	for i := 0; i < *numOfItr; i++ {
 		sendPing(msg)
 	}
-	fmt.Println(time.Since(t))
+	//fmt.Println(time.Since(t))
 }

@@ -25,15 +25,21 @@ func StartServer(handler *TESTHandler, port string) {
 	return
 }
 
-func (h *TESTHandler) Ping(str string) (string, error) {
-	//fmt.Println("Server: Recvd Msg: ", str)
-	return "Echo Reply", nil
+func (h *TESTHandler) Ping(msg *testServer.EchoRequest) (*testServer.EchoReply, error) {
+	if h.Verbose {
+		fmt.Println("Server: Recvd Msg: ", msg.Request)
+	}
+	var replyMsg testServer.EchoReply
+	replyMsg.Reply = msg.Request
+	return &replyMsg, nil
 }
 
 type TESTHandler struct {
+	Verbose bool
 }
 
-func NewTESTHandler() *TESTHandler {
+func NewTESTHandler(ver bool) *TESTHandler {
 	h := new(TESTHandler)
+	h.Verbose = ver
 	return h
 }
