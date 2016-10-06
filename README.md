@@ -22,6 +22,8 @@ This repository also contains some performance tests.
         | Time taken (gRPC & Protobuf) in secs  | 0.085299737 | 0.122767140 | 0.371312381 | 3.350658766 | 32.749954770 |
            
 
+        ![alt text](https://github.com/OpenSnaproute/rpcbenchmarking/blob/master/performaceTest/test1.png "Test1 Graph")
+
 - **Test 2** : Keep the number of times message is sent across fixed and vary the message size.
 
     - **Number of Server**: 1
@@ -33,3 +35,6 @@ This repository also contains some performance tests.
         |:-------------------------------------:|:-----------:|:-----------:|:-----------:|:-----------:|:-----------:|
         |       Time taken (Thrift) in sec      | 0.082524018 | 0.103245114 | 0.070778594 | 0.191037682 | 2.232637674 |
         | Time taken (gRPC & Protobuf) in secs  | 0.257207749 | 0.307096547 | 0.262112270 | 0.455775537 | 3.531310872 |
+
+
+        ![alt text](https://github.com/OpenSnaproute/rpcbenchmarking/blob/master/performaceTest/test2.png "Test2 Graph")
