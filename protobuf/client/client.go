@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/golang/protobuf/proto"
-	"net"
+	"golang.org/x/net/context"
+	"google.golang.org/grpc"
 	"os"
 	"rpcbenchmarking/protobuf/ping"
 )
@@ -16,33 +16,24 @@ func main() {
 	verbose := flag.Bool("Verbose", false, "Verbosity")
 
 	flag.Parse()
+
 	var msg string
 	for i := 0; i < *numOfBytes; i++ {
 		msg += "A"
 	}
 
-	protodata := new(ping.EchoRequest)
-	for i := 0; i < *numOfIter; i++ {
-		protodata.ReqMsg = &msg
-		data, err := proto.Marshal(protodata)
-		if err != nil {
-			fmt.Println("Error Marshalling data")
-			return
-		}
-		dst := "127.0.0.1:" + *svrPort
-		conn, err := net.Dial("tcp", dst)
-		checkError(err)
-		_, err = conn.Write(data)
-		checkError(err)
+	dst := "127.0.0.1:" + *svrPort
+	conn, err := grpc.Dial(dst, grpc.WithInsecure())
+	checkError(err)
+	defer conn.Close()
 
-		recvData := make([]byte, 8192)
-		n, err := conn.Read(recvData)
-		checkError(err)
-		protoRecvData := new(ping.EchoReply)
-		err = proto.Unmarshal(recvData[0:n], protoRecvData)
+	c := ping.NewPingClient(conn)
+
+	for i := 0; i < *numOfIter; i++ {
+		r, err := c.SendEcho(context.Background(), &ping.EchoRequest{ReqMsg: &msg})
 		checkError(err)
 		if *verbose {
-			fmt.Println("Recv Data:", protoRecvData)
+			fmt.Println("Recv Message:", *r.RepMsg)
 		}
 	}
 }
